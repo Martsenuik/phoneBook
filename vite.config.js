@@ -10,5 +10,5 @@ export default defineConfig({
       },
     }),
   ],
-    base: "/phoneBook"
+   base: '/phoneBook/',
 })
