@@ -8,8 +8,26 @@ class App extends Component {
     name: "",
   };
 
+  componentDidMount() {
+    const contacts = localStorage.getItem("contacts");
+
+    if (contacts) {
+      this.setState({
+        contacts: JSON.parse(contacts),
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
+    }
+  }
+
   handleChange = (e) => {
-    this.setState({ name: e.target.value });
+    this.setState({
+      name: e.target.value,
+    });
   };
 
   addContact = (e) => {
@@ -26,6 +44,12 @@ class App extends Component {
     }));
   };
 
+  deleteContact = (id) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter((contact) => contact.id !== id),
+    }));
+  };
+
   render() {
     return (
       <div>
@@ -39,7 +63,10 @@ class App extends Component {
 
         <h2>Contacts</h2>
 
-        <ContactList contacts={this.state.contacts} />
+        <ContactList
+          contacts={this.state.contacts}
+          onDelete={this.deleteContact}
+        />
       </div>
     );
   }
